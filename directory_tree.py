@@ -23,10 +23,6 @@ class Directory:
             return True
         return False
 
-    def __lt__(self, other):
-        # Less than comparison based on directory name for sorting.
-        return self.name < other.name
-
     def __str__(self, level=0):
         result = "  " * level + self.name + "\n"
         for subdir in sorted(self.subdirectories.values(), key=lambda d: d.name):
