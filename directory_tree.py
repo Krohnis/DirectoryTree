@@ -86,13 +86,7 @@ class DirectoryTree:
         if src_parts[-1] in dest_dir.subdirectories:
             dest_subdir = dest_dir.get_subdirectory(src_parts[-1])
 
-            # Merge the subdirectories: copy all subdirectories from source into the destination subdirectory
-            for subdir_name, subdir in src_subdir.subdirectories.items():
-                # If the subdirectory doesn't already exist in the destination, add it
-                if subdir_name not in dest_subdir.subdirectories:
-                    dest_subdir.add_subdirectory(subdir_name)
-                # Ensure the subdirectory's content is merged (not overwritten)
-                dest_subdir.get_subdirectory(subdir_name).subdirectories.update(subdir.subdirectories)
+            self._merge_directories(src_subdir, dest_subdir)
         else:
             # Otherwise, simply move the directory by adding it to the destination
             dest_dir.add_subdirectory(src_parts[-1])
@@ -101,6 +95,24 @@ class DirectoryTree:
 
         # After moving, remove the directory from the original location
         src_dir.delete_subdirectory(src_parts[-1])
+
+    def is_ancestor(self, potential_ancestor, dir_to_check):
+        # Helper function to check if 'potential_ancestor' is an ancestor of 'dir_to_check'.
+        # We check by traversing up from the dir_to_check to see if we reach the potential_ancestor.
+        current = dir_to_check
+        while current:
+            if current == potential_ancestor:
+                return True
+            current = current.parent  # Traverse upwards to check if the potential_ancestor is an ancestor
+        return False
+
+    def _merge_directories(self, src_subdir, dest_subdir):
+        # Helper function to merge the entire directory structure """
+        for subdir_name, subdir in src_subdir.subdirectories.items():
+            if subdir_name not in dest_subdir.subdirectories:
+                dest_subdir.add_subdirectory(subdir_name)
+            # Recursively merge the subdirectories
+            self._merge_directories(subdir, dest_subdir.get_subdirectory(subdir_name))
 
     def delete(self, path):
         if path == '~':
@@ -123,16 +135,6 @@ class DirectoryTree:
 
     def list(self):
         print(self.root)
-
-    def is_ancestor(self, potential_ancestor, dir_to_check):
-        # Helper function to check if 'potential_ancestor' is an ancestor of 'dir_to_check'.
-        # We check by traversing up from the dir_to_check to see if we reach the potential_ancestor.
-        current = dir_to_check
-        while current:
-            if current == potential_ancestor:
-                return True
-            current = current.parent  # Traverse upwards to check if the potential_ancestor is an ancestor
-        return False
 
 def process_commands():
     directory_tree = DirectoryTree()
