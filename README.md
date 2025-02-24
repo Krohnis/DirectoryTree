@@ -1,6 +1,6 @@
 # Directory Tree: Pseudo File Manager
 
-This is a simple **Directory Tree** program implemented in Python that functions as a pseudo file manager.  It allows users to create, move, list, and delete directories in a hierarchical structure. The program simulates a basic file system structure and performs operations like moving directories, handling subdirectories, and merging directories with the same name.
+This is a simple **Directory Tree** program implemented in Python that functions as a pseudo file manager.  It allows users to create, move, list, and delete directories in a hierarchical structure.
 
 ## Features:
 - **CREATE directories**: You can create directories in a specified path.
